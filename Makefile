@@ -1,20 +1,9 @@
-IDIR=.
 CC=gcc
-CFLAGS=-std=c11 -Wall -o3$(IDIR)
+CFLAGS=-std=c11 -Wall -o3
 
-ODIR=obj
 LIBS=-lm
 
-MYOBJ=envelope.o
-OBJ = $(patsubst %,$(ODIR)/%,$(MYOBJ))
+MYC=envelope.h
 
-$(ODIR)/%.o: %.c
-	$(CC) -c -o $@ $< $(CFLAGS)
-
-envelope: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
-	
-.PHONY: clean
-
-clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
+envelope: $(MYC)
+	$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
