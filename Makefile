@@ -1,2 +1,20 @@
-envelope: envelope.c /usr/lib/x86_64-linux-gnu/libm.a  
-	gcc -std=c11 -Wall -fmax-errors=10 -Wextra envelope.c -lm -o envelope
+IDIR=.
+CC=gcc
+CFLAGS=-std=c11 -Wall -O3$(IDIR)
+
+ODIR=obj
+LIBS=-lm
+
+MYOBJ=envelope.o
+OBJ = $(patsubst %,$(ODIR)/%,$(MYOBJ))
+
+$(ODIR)/%.o: %.c
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+envelope: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	
+.PHONY: clean
+
+clean:
+	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
