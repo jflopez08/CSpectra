@@ -71,7 +71,7 @@ double gauss(double *array1, double *array2, int n, double f, double point){
 	int i;
 	double sum = 0.0;
 	for(i=0; i<n; i++){
-		sum += array2[i])*exp(-log(2.0)*(point-array1[i])/(f/2.0),2));
+		sum += (array2[i])*exp(-log(2.0)*pow((point-array1[i])/(f/2.0),2));
 	}
 	return sum;
 }
