@@ -1,6 +1,6 @@
 IDIR=.
 CC=gcc
-CFLAGS=-std=c11 -Wall -O3$(IDIR)
+CFLAGS=-std=c11 -Wall -o3$(IDIR)
 
 ODIR=obj
 LIBS=-lm
