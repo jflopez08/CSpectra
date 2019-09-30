@@ -7,9 +7,9 @@ double gauss(double *array1, double *array2, int n, double f, double point);
 double lorentz(double *array1, double *array2, int n, double f, double point);
 
 int main(int argc, char *argv[]){
-	if(argc !=8){
+	if (argc !=8){
 		printf("Remember: ./envelope name_of_file gaussian_or_lorentz num_of_points min_range max_range fwhm num_responses\n");
-	} else{
+	} else {
 		char *filename = argv[1];
 		FILE *file;
 		int num_of_points = atoi(argv[3]);
@@ -71,7 +71,7 @@ double gauss(double *array1, double *array2, int n, double f, double point){
 	int i;
 	double sum = 0.0;
 	for(i=0; i<n; i++){
-		sum += (2*sqrt(log(2.0))*array2[i])/(f*sqrt(acos(-1)))*exp(-0.5*pow(2*sqrt(2*log(2.0))*(point-array1[i])/f,2));
+		sum += array2[i])*exp(-log(2.0)*(point-array1[i])/(f/2.0),2));
 	}
 	return sum;
 }
@@ -80,7 +80,7 @@ double lorentz(double *array1, double *array2, int n, double f, double point){
 	int i;
 	double sum = 0.0;
 	for(i=0; i<n; i++){
-		sum += (array2[i])*2/(f*acos(-1)+f*acos(-1)*pow((point-array1[i])/f,2));
+		sum += (array2[i])/(1 + pow((point-array1[i])/(f/2.0),2));
 	}
 	return sum;
 }
