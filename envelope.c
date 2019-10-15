@@ -5,6 +5,7 @@
 
 double gauss(double *array1, double *array2, int n, double f, double point);
 double lorentz(double *array1, double *array2, int n, double f, double point);
+static int compare(const void *, const void *);
 
 int main(int argc, char *argv[]){
 	if (argc !=8){
@@ -22,19 +23,24 @@ int main(int argc, char *argv[]){
 		double responses[num_responses]; 
 		int i;
 		int j = strlen(filename);
-		for(i=0; i<num_of_points+1; i++){
+		
+        for(i=0; i<num_of_points+1; i++){
 			total_points[i] = (double) min + i*(max-min)/((double) num_of_points); 
 		}
-		if(strcmp(argv[2], "gaussian") == 0){
-			file = fopen(filename, "r");
-			for(i=0; i<num_responses; i++){
-				fscanf(file,"%lf%lf", &energies[i], &responses[i]);
-			}
+        file = fopen(filename, "r");
+        for(i=0; i<num_responses; i++){
+			fscanf(file,"%lf%lf", &energies[i], &responses[i]);
+		}
+        qsort(responses, num_responses, sizeof(double), compare);
+        for(i=0; i<num_responses; i++){
+			responses[i] = responses[i]/responses[num_responses];
+		}
+        fclose(file);
+        if(strcmp(argv[2], "gaussian") == 0){
 			double gaussian[num_of_points+1];
 			for(i=0; i<num_of_points+1; i++){
 				gaussian[i] = gauss(energies, responses, num_responses, fwhm, total_points[i]); 
 			}
-			fclose(file);
 			filename[j-1] = 't';
 			filename[j-2] = 'u';
 			filename[j-3] = 'o';
@@ -44,16 +50,11 @@ int main(int argc, char *argv[]){
 			}
 			fclose(file);
 		}
-		if(strcmp(argv[2], "lorentz") == 0){
-			file = fopen(filename, "r");
-			for(i=0; i<num_responses; i++){
-				fscanf(file,"%lf%lf", &energies[i], &responses[i]);
-			}
+        else if(strcmp(argv[2], "lorentz") == 0){
 			double lorentzian[num_of_points+1];
 			for(i=0; i<num_of_points+1; i++){
 				lorentzian[i] = lorentz(energies, responses, num_responses, fwhm, total_points[i]); 
 			}
-			fclose(file);
 			filename[j-1] = 't';
 			filename[j-2] = 'u';
 			filename[j-3] = 'o';
@@ -65,6 +66,12 @@ int main(int argc, char *argv[]){
 		}
 	}
 	return 0;
+}
+
+static int compare(const void * a, const void * b){
+    if (*(double*)a > *(double*)b) return 1;
+    else if (*(double*)a < *(double*)b) return -1;
+    else return 0;  
 }
 
 double gauss(double *array1, double *array2, int n, double f, double point){
